@@ -20,17 +20,17 @@ PAGE_NO = 1
 
 
 class MirrorStatus:
-    STATUS_UPLOADING = "Uploading...📤"
-    STATUS_DOWNLOADING = "Downloading...📥"
-    STATUS_CLONING = "Cloning...♻️"
-    STATUS_WAITING = "Queued...💤"
-    STATUS_FAILED = "Failed 🚫. Cleaning Download..."
-    STATUS_PAUSE = "Paused...⛔️"
-    STATUS_ARCHIVING = "Archiving...🔐"
-    STATUS_EXTRACTING = "Extracting...📂"
-    STATUS_SPLITTING = "Splitting...✂️"
-    STATUS_CHECKING = "CheckingUp...📝"
-    STATUS_SEEDING = "Seeding...🌧"
+    STATUS_UPLOADING = "Uploading..."
+    STATUS_DOWNLOADING = "Downloading..."
+    STATUS_CLONING = "Cloning..."
+    STATUS_WAITING = "Queued..."
+    STATUS_FAILED = "Failed. Cleaning Download..."
+    STATUS_PAUSE = "Paused..."
+    STATUS_ARCHIVING = "Archiving..."
+    STATUS_EXTRACTING = "Extracting..."
+    STATUS_SPLITTING = "Splitting..."
+    STATUS_CHECKING = "CheckingUp..."
+    STATUS_SEEDING = "Seeding..."
 
 SIZE_UNITS = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
 
@@ -106,9 +106,9 @@ def get_progress_bar_string(status):
     p = 0 if total == 0 else round(completed * 100 / total)
     p = min(max(p, 0), 100)
     cFull = p // 8
-    p_str = '■' * cFull
-    p_str += '□' * (12 - cFull)
-    p_str = f"[{p_str}]"
+    p_str = '▰' * cFull
+    p_str += '▱' * (12 - cFull)
+    p_str = f"{p_str}"
     return p_str
 
 def get_readable_message():
@@ -142,7 +142,7 @@ def get_readable_message():
                     msg += f"<b>\n│\n├ Uploaded :</b> {get_readable_file_size(download.processed_bytes())} of {download.size()}"
                 else:
                     msg += f"<b>\n│\n├ Downloaded : </b>{get_readable_file_size(download.processed_bytes())} of {download.size()}"
-                msg += f"<b>\n│\n├ Speed : </b>{download.speed()} <b>\n│\n├ ETA: </b>{download.eta()}"
+                msg += f"<b>\n│\n├ Speed : </b>{download.speed()} <b>\n│\n├ ETA : </b>{download.eta()}"
                 try:
                     msg += f"<b>\n│\n├ Seeders :</b> <code>{download.aria_download().num_seeders}</code>" \
                            f" | <b>Peers : </b><code>{download.aria_download().connections}</code>"
