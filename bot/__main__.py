@@ -59,21 +59,6 @@ def stats(update, context):
             f'<b>Memory Used:</b> {mem_u}\n'
     sendMessage(stats, context.bot, update)
 
-
-def start(update, context):
-    buttons = button_build.ButtonMaker()
-    buttons.buildbutton("Repo", "https://www.github.com/anasty17/mirror-leech-telegram-bot")
-    buttons.buildbutton("Report Group", "https://t.me/mltbbugsreport")
-    reply_markup = InlineKeyboardMarkup(buttons.build_menu(2))
-    if CustomFilters.authorized_user(update) or CustomFilters.authorized_chat(update):
-        start_string = f'''
-This bot can mirror all your links to Google Drive!
-Type /{BotCommands.HelpCommand} to get a list of available commands
-'''
-        sendMarkup(start_string, context.bot, update, reply_markup)
-    else:
-        sendMarkup('Not Authorized user', context.bot, update, reply_markup)
-
 def restart(update, context):
     restart_message = sendMessage("Restarting...", context.bot, update)
     fs_utils.clean_all()
@@ -243,10 +228,6 @@ def main():
     elif OWNER_ID:
         try:
             text = "<b>Bot Restarted!</b>"
-            bot.sendMessage(chat_id=OWNER_ID, text=text, parse_mode=ParseMode.HTML)
-            if AUTHORIZED_CHATS:
-                for i in AUTHORIZED_CHATS:
-                    bot.sendMessage(chat_id=i, text=text, parse_mode=ParseMode.HTML)
         except Exception as e:
             LOGGER.warning(e)
 
