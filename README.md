@@ -1,8 +1,5 @@
-This is a Telegram Bot written in Python for mirroring files on the Internet to your Google Drive or Telegram. Based on [python-aria-mirror-bot](https://github.com/lzzy12/python-aria-mirror-bot)
-
 # Features:
 
-## By [Anas](https://github.com/anasty17)
 - qBittorrent
 - Select files from Torrent before downloading using qbittorrent
 - Leech (splitting, thumbnail for each user, setting as document or as media for each user)
@@ -52,51 +49,6 @@ This is a Telegram Bot written in Python for mirroring files on the Internet to 
 
 - Direct links Supported:
   >letsupload.io, hxfile.co, anonfiles.com, bayfiles.com, antfiles, fembed.com, fembed.net, femax20.com, layarkacaxxi.icu, fcdn.stream, sbplay.org, naniplay.com, naniplay.nanime.in, naniplay.nanime.biz, sbembed.com, streamtape.com, streamsb.net, feurl.com, pixeldrain.com, racaty.net, 1fichier.com, 1drv.ms (Only works for file not folder or business account), uptobox.com (Uptobox account must be premium), solidfiles.com
-
-# How to deploy?
-
-## Prerequisites
-
-- Tutorial Video from A to Z:
-  - Thanks to [Wiszky](https://github.com/vishnoe115)
-<p><a href="https://www.youtube.com/watch?v=gFQWJ4ftt48"> <img src="https://img.shields.io/badge/See%20Video-black?style=for-the-badge&logo=YouTube" width="160""/></a></p>
-
-### 1. Installing requirements
-
-- Clone this repo:
-```
-git clone https://github.com/anasty17/mirror-leech-telegram-bot mirrorbot/ && cd mirrorbot
-```
-- For Debian based distros
-```
-sudo apt install python3
-```
-Install Docker by following the [official Docker docs](https://docs.docker.com/engine/install/debian/) or by commands below.
-```
-sudo apt install snapd
-sudo snap install docker
-```
-- For Arch and it's derivatives:
-```
-sudo pacman -S docker python
-```
-- Install dependencies for running setup scripts:
-```
-pip3 install -r requirements-cli.txt
-```
-
-------
-
-### 2. Setting up config file
-
-```
-cp config_sample.env config.env
-```
-- Remove the first line saying:
-```
-_____REMOVE_THIS_LINE_____=True
-```
-Fill up rest of the fields. Meaning of each field is discussed below:
 
 **1. Required Fields**
 <details>
@@ -190,87 +142,6 @@ Three buttons are already added including Drive Link, Index Link, and View Link,
 pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib
 python3 generate_drive_token.py
 ```
-------
-
-## Deploying on VPS
-
-**IMPORTANT NOTES**:
-1. You must set `SERVER_PORT` variable to `80` or any other port you want to use.
-2. Use `anasty17/mltb-oracle:latest` for oracle or if u faced problem with arm64 docker run
-3. To clear the container (this will not affect on the image):
-```
-sudo docker container prune
-```
-4. To delete the images:
-```
-sudo docker image prune -a
-```
-------
-
-### Deploying on VPS Using Docker
-
-- Start Docker daemon (skip if already running):
-```
-sudo dockerd
-```
-- **Note**: If not started or not starting, run the command below then try to start.
-```
-sudo apt install docker.io
-```
-- Build Docker image:
-```
-sudo docker build . -t mirror-bot
-```
-- Run the image:
-```
-sudo docker run -p 80:80 mirror-bot
-```
-- To stop the image:
-```
-sudo docker ps
-```
-```
-sudo docker stop id
-```
-
-----
-
-### Deploying on VPS Using docker-compose
-
-**NOTE**: If you want to use port other than 80, change it in [docker-compose.yml](https://github.com/anasty17/mirror-leech-telegram-bot/blob/master/docker-compose.yml) also.
-
-```
-sudo apt install docker-compose
-```
-- Build and run Docker image:
-```
-sudo docker-compose up
-```
-- After editing files with nano for example (nano start.sh):
-```
-sudo docker-compose up --build
-```
-- or
-```
-sudo docker-compose build
-sudo docker-compose up
-```
-- To stop the image:
-```
-sudo docker-compose stop
-```
-- To run the image:
-```
-sudo docker-compose start
-```
-- Tutorial video from Tortoolkit repo for docker-compose and checking ports
-<p><a href="https://youtu.be/c8_TU1sPK08"> <img src="https://img.shields.io/badge/See%20Video-black?style=for-the-badge&logo=YouTube" width="160""/></a></p>
-
-------
-
-## Deploying on Heroku
-<p><a href="https://github.com/anasty17/mirror-leech-telegram-bot/tree/heroku"> <img src="https://img.shields.io/badge/Deploy%20Guide-blueviolet?style=for-the-badge&logo=heroku" width="170""/></a></p>
-
 ------
 
 # Extras
@@ -385,23 +256,6 @@ Then add emails from emails.txt to Google Group, after that add this Google Grou
 ```
 python3 add_to_team_drive.py -d SharedTeamDriveSrcID
 ```
-------
-
-### Generate Database
-
-**1. Using ElephantSQL**
-- Go to https://elephantsql.com and create account (skip this if you already have **ElephantSQL** account)
-- Hit `Create New Instance`
-- Follow the further instructions in the screen
-- Hit `Select Region`
-- Hit `Review`
-- Hit `Create instance`
-- Select your database name
-- Copy your database url, and fill to `DATABASE_URL` in config
-
-**2. Using Heroku PostgreSQL**
-<p><a href="https://dev.to/prisma/how-to-setup-a-free-postgresql-database-on-heroku-1dc1"> <img src="https://img.shields.io/badge/See%20Dev.to-black?style=for-the-badge&logo=dev.to" width="160""/></a></p>
-
 ------
 
 ## Multi Search IDs
