@@ -972,3 +972,98 @@ class GoogleDriveHelper:
         elif self.is_uploading:
             LOGGER.info(f"Cancelling Upload: {self.name}")
             self.__listener.onUploadError('your upload has been stopped and uploaded data has been deleted!')
+
+    def drive_list_inline(self, fileName, stopDup=False, noMulti=False, isRecursive=True, itemType=""):
+        msg = ""
+        if not stopDup:
+            fileName = self.escapes(str(fileName))
+        contents_count = 0
+        Title = False
+        if len(DRIVES_IDS) > 1:
+            token_service = self.alt_authorize()
+            if token_service is not None:
+                self.__service = token_service
+        for index, parent_id in enumerate(DRIVES_IDS):
+            if isRecursive and len(parent_id) > 23:
+                isRecur = False
+            else:
+                isRecur = isRecursive
+            response = self.drive_query(parent_id, fileName, stopDup, isRecur, itemType)
+            if not response["files"] and noMulti:
+                break
+            elif not response["files"]:
+                continue
+            if not Title:
+                msg += f'<h4>Search Result For {fileName}</h4>'
+                Title = True
+            if len(DRIVES_NAMES) > 1 and DRIVES_NAMES[index] is not None:
+                msg += f"╾────────────╼<br><b>{DRIVES_NAMES[index]}</b><br>╾────────────╼<br>"
+            for file in response.get('files', []):
+                mime_type = file.get('mimeType')
+                if mime_type == "application/vnd.google-apps.folder":
+                    furl = f"https://drive.google.com/drive/folders/{file.get('id')}"
+                    msg += f"📁 <code>{file.get('name')}<br>(folder)</code><br>"
+                    furl = short_url(furl)
+                    msg += f"<b><a href={furl}>Drive Link</a></b>"
+                    if INDEX_URLS[index] is not None:
+                        if isRecur:
+                            url_path = "/".join([requests.utils.quote(n, safe='') for n in self.get_recursive_list(file, parent_id)])
+                        else:
+                            url_path = requests.utils.quote(f'{file.get("name")}')
+                        url = f'{INDEX_URLS[index]}/{url_path}/'
+                        url = short_url(url)
+                        msg += f' <b>| <a href="{url}">Index Link</a></b>'
+                elif mime_type == 'application/vnd.google-apps.shortcut':
+                    msg += f"⁍<a href='https://drive.google.com/drive/folders/{file.get('id')}'>{file.get('name')}" \
+                        f"</a> (shortcut)"
+                    # Excluded index link as indexes cant download or open these shortcuts
+                else:
+                    furl = f"https://drive.google.com/uc?id={file.get('id')}&export=download"
+                    msg += f"📄 <code>{file.get('name')}<br>({get_readable_file_size(int(file.get('size', 0)))})</code><br>"
+                    furl = short_url(furl)
+                    msg += f"<b><a href={furl}>Drive Link</a></b>"
+                    if INDEX_URLS[index] is not None:
+                        if isRecur:
+                            url_path = "/".join(
+                                requests.utils.quote(n, safe='')
+                                for n in self.get_recursive_list(file, parent_id)
+                            )
+
+                        else:
+                            url_path = requests.utils.quote(f'{file.get("name")}')
+                        url = f'{INDEX_URLS[index]}/{url_path}'
+                        url = short_url(url)
+                        msg += f' <b>| <a href="{url}">Index Link</a></b>'
+                        if VIEW_LINK:
+                            urls = f'{INDEX_URLS[index]}/{url_path}?a=view'
+                            urls = short_url(urls)
+                            msg += f' <b>| <a href="{urls}">View Link</a></b>'
+                msg += '<br><br>'
+                contents_count += 1
+                if len(msg.encode('utf-8')) > 39000:
+                    self.telegraph_content.append(msg)
+                    msg = ""
+            if noMulti:
+                break
+
+        if msg != '':
+            self.telegraph_content.append(msg)
+
+        if len(self.telegraph_content) == 0:
+            return "", None
+
+        for content in self.telegraph_content:
+            self.path.append(
+                telegraph.create_page(
+                    title='Mirror-Leech-Bot Drive Search',
+                    content=content
+                )["path"]
+            )
+        time.sleep(0.5)
+        self.num_of_path = len(self.path)
+        if self.num_of_path > 1:
+            self.edit_telegraph()
+
+        msg = f"<b>Found {contents_count} result for <i>{fileName}</i></b>"
+        url = f"https://telegra.ph/{self.path[0]}"
+        return msg, url
