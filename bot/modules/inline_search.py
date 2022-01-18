@@ -61,4 +61,4 @@ async def inline_search(_, event: InlineQuery):
                 cache_time=0
             )
         except QueryIdInvalid:
-            pass
+            LOGGER.info(f"QueryIdInvalid: {event.query}")
