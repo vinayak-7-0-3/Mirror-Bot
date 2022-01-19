@@ -25,7 +25,7 @@ async def inline_search(_, event: InlineQuery):
     else:
         key = event.query
         gdrive = GoogleDriveHelper()
-        msg, url = gdrive.drive_list_inline(key, isRecursive=False, itemType="both")
+        msg, url = gdrive.drive_list(key, isRecursive=False, itemType="both", inline=True)
         if url:
             answers.append(
                 InlineQueryResultArticle(
