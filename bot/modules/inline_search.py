@@ -9,6 +9,7 @@ async def inline_search(_, event: InlineQuery):
     answers = list()
     LOGGER.info(event.query)
     if event.query == "":
+        LOGGER.info("Empty query")
         answers.append(
             InlineQueryResultArticle(
                 title="Inline Search Mode",
@@ -19,29 +20,31 @@ async def inline_search(_, event: InlineQuery):
                 ),
                 reply_markup=InlineKeyboardMarkup([
                     [InlineKeyboardButton("Search Here", switch_inline_query_current_chat="")],
-                    [InlineKeyboardButton("Mirror Group", url="https://t.me/Fubuki_mirror")]
+                    [InlineKeyboardButton("Mirror Group", url="https://t.me/Fubuki_mirror")],
                 ])
             )
         )
     else:
         key = event.query
         gdrive = GoogleDriveHelper()
-        msg, url = gdrive.drive_list(key, isRecursive=False, itemType="both", inline=True)
-        if url and msg:
-            answers.append(
-                InlineQueryResultArticle(
-                    title=f"Found Result for {key}",
-                    description="Click To Get Link",
-                    input_message_content=InputTextMessageContent(
-                        message_text=msg,
-                        disable_web_page_preview=True
-                    ),
-                    reply_markup=InlineKeyboardMarkup([
-                        [InlineKeyboardButton("Result", url=url)],
-                        [InlineKeyboardButton("Search Again", switch_inline_query_current_chat="")],
-                    ])
+        file_title, desc, drive_url, index_url, view_link = gdrive.drive_list_inline(key, isRecursive=False, itemType="both")
+        if file_title:
+            for title in file_title:
+                answers.append(
+                    InlineQueryResultArticle(
+                        title=title,
+                        description=desc[file_title.index(title)],
+                        input_message_content=InputTextMessageContent(
+                            message_text=view_link[file_title.index(title)],
+                            disable_web_page_preview=True
+                        ),
+                        reply_markup=InlineKeyboardMarkup([
+                            [InlineKeyboardButton("View Link", url=view_link[file_title.index(title)])],
+                            [InlineKeyboardButton("Drive Link", url=drive_url[file_title.index(title)])],
+                            [InlineKeyboardButton("Index Link", url=index_url[file_title.index(title)])],
+                        ])
+                    )
                 )
-            )
         else:
             answers.append(
                 InlineQueryResultArticle(
