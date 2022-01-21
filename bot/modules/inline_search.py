@@ -7,6 +7,7 @@ from pyrogram.errors import QueryIdInvalid
 @app.on_inline_query()
 async def inline_search(_, event: InlineQuery):
     answers = list()
+    LOGGER.info(event.query)
     if event.query == "":
         answers.append(
             InlineQueryResultArticle(
@@ -26,7 +27,7 @@ async def inline_search(_, event: InlineQuery):
         key = event.query
         gdrive = GoogleDriveHelper()
         msg, url = gdrive.drive_list(key, isRecursive=False, itemType="both", inline=True)
-        if url:
+        if url and msg:
             answers.append(
                 InlineQueryResultArticle(
                     title=f"Found Result for {key}",
@@ -47,7 +48,7 @@ async def inline_search(_, event: InlineQuery):
                     title=f"No Result Found for {key}",
                     description="Try with another search key",
                     input_message_content=InputTextMessageContent(
-                        message_text=msg,
+                        message_text="No Result Found For Your Search Key\nTry with another search",
                         disable_web_page_preview=True
                     ),
                     reply_markup=InlineKeyboardMarkup([
