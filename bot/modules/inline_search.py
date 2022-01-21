@@ -35,13 +35,14 @@ async def inline_search(_, event: InlineQuery):
                         title=title,
                         description=desc[file_title.index(title)],
                         input_message_content=InputTextMessageContent(
-                            message_text=view_link[file_title.index(title)],
+                            message_text=f"Title : {title}\n{desc[file_title.index(title)]}",
                             disable_web_page_preview=True
                         ),
                         reply_markup=InlineKeyboardMarkup([
                             [InlineKeyboardButton("View Link", url=view_link[file_title.index(title)])],
                             [InlineKeyboardButton("Drive Link", url=drive_url[file_title.index(title)])],
                             [InlineKeyboardButton("Index Link", url=index_url[file_title.index(title)])],
+                            [InlineKeyboardButton("Search Again", switch_inline_query_current_chat="")],
                         ])
                     )
                 )
