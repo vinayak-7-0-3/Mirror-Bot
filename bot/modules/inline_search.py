@@ -9,19 +9,22 @@ async def inline_search(_, event: InlineQuery):
     answers = list()
     LOGGER.info(event.query)
     if event.query == "":
-        LOGGER.info("Empty query")
         answers.append(
             InlineQueryResultArticle(
-                title="Inline Search Mode",
-                description="You can directly search for leeched files from here",
+                title="Search Your Desired File Here",
                 input_message_content=InputTextMessageContent(
-                    message_text="You can search for the leeched files from anywhere directly",
-                    disable_web_page_preview=True
+                    "You can search your files anywhere anytime using inline method\n\nUse Search Button Below"
                 ),
-                reply_markup=InlineKeyboardMarkup([
-                    [InlineKeyboardButton("Search Here", switch_inline_query_current_chat="")],
-                    [InlineKeyboardButton("Mirror Group", url="https://t.me/Fubuki_mirror")],
-                ])
+                reply_markup=InlineKeyboardMarkup(
+                    [
+                        [
+                            InlineKeyboardButton(
+                                text="Search",
+                                switch_inline_query_current_chat=""
+                            )
+                        ]
+                    ]
+                )
             )
         )
     else:
@@ -52,11 +55,10 @@ async def inline_search(_, event: InlineQuery):
                     title=f"No Result Found for {key}",
                     description="Try with another search key",
                     input_message_content=InputTextMessageContent(
-                        message_text="No Result Found For Your Search Key\nTry with another search",
-                        disable_web_page_preview=True
+                        message_text="No Result Found For Your Search Key\nTry with another search"
                     ),
                     reply_markup=InlineKeyboardMarkup([
-                        [InlineKeyboardButton("Search Again", switch_inline_query_current_chat="")],
+                        [InlineKeyboardButton("Search Again", switch_inline_query_current_chat="")]
                     ])
                 )
             )
