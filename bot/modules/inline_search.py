@@ -4,6 +4,8 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, InlineQue
 from bot.helper.mirror_utils.upload_utils.gdriveTools import GoogleDriveHelper
 from pyrogram.errors import QueryIdInvalid
 
+thumb = "https://res.cloudinary.com/animezz-hub/image/upload/v1642851366/moviezzhub/thumb/IMG_20220122_170453_198_h6hflm.jpg"
+
 @app.on_inline_query()
 async def inline_search(_, event: InlineQuery):
     answers = list()
@@ -37,6 +39,7 @@ async def inline_search(_, event: InlineQuery):
                     InlineQueryResultArticle(
                         title=title,
                         description=desc[file_title.index(title)],
+                        thumb_url=thumb,
                         input_message_content=InputTextMessageContent(
                             message_text=f"Title : {title}\n{desc[file_title.index(title)]}",
                             disable_web_page_preview=True
