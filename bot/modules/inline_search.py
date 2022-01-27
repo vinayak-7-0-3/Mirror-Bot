@@ -65,10 +65,10 @@ async def inline_search(_, event: InlineQuery):
                     ])
                 )
             )
-        try:
-            await event.answer(
-                results=answers,
-                cache_time=0
-            )
-        except QueryIdInvalid:
-            LOGGER.info(f"QueryIdInvalid: {event.query}")
+    try:
+        await event.answer(
+            results=answers,
+            cache_time=0
+        )
+    except QueryIdInvalid:
+        LOGGER.info(f"QueryIdInvalid: {event.query}")
