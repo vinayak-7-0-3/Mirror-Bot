@@ -1,4 +1,5 @@
 from bot import app, LOGGER
+from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, InlineQuery, InlineQueryResultArticle, \
     InputTextMessageContent
 from bot.helper.mirror_utils.upload_utils.gdriveTools import GoogleDriveHelper
