@@ -74,7 +74,7 @@ async def inline_search(_, event: InlineQuery):
     except QueryIdInvalid:
         LOGGER.info(f"QueryIdInvalid: {event.query}")
 
-#@app.on_message(filters.command("sayonara"))
+@app.on_message(filters.command("sayonara"))
 async def quit_group(bot, update):
     await bot.send_message(
         chat_id=update.chat.id,
