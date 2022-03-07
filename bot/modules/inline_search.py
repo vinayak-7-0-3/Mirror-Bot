@@ -36,23 +36,25 @@ async def inline_search(_, event: InlineQuery):
         file_title, desc, drive_url, index_url, view_link = gdrive.drive_list_inline(key, isRecursive=False, itemType="both")
         if file_title:
             for title in file_title:
-                answers.append(
-                    InlineQueryResultArticle(
-                        title=title,
-                        description=desc[file_title.index(title)],
-                        thumb_url=thumb,
-                        input_message_content=InputTextMessageContent(
-                            message_text=f"Title : {title}\n{desc[file_title.index(title)]}",
-                            disable_web_page_preview=True
-                        ),
-                        reply_markup=InlineKeyboardMarkup([
-                            [InlineKeyboardButton("View Link", url=view_link[file_title.index(title)])],
-                            [InlineKeyboardButton("Drive Link", url=drive_url[file_title.index(title)])],
-                            [InlineKeyboardButton("Index Link", url=index_url[file_title.index(title)])],
-                            [InlineKeyboardButton("Search Again", switch_inline_query_current_chat="")],
-                        ])
+                # Limit number of search result to less than 50
+                if file_title.index(title) < 50:
+                    answers.append(
+                        InlineQueryResultArticle(
+                            title=title,
+                            description=desc[file_title.index(title)],
+                            thumb_url=thumb,
+                            input_message_content=InputTextMessageContent(
+                                message_text=f"Title : {title}\n{desc[file_title.index(title)]}",
+                                disable_web_page_preview=True
+                            ),
+                            reply_markup=InlineKeyboardMarkup([
+                                [InlineKeyboardButton("View Link", url=view_link[file_title.index(title)])],
+                                [InlineKeyboardButton("Drive Link", url=drive_url[file_title.index(title)])],
+                                [InlineKeyboardButton("Index Link", url=index_url[file_title.index(title)])],
+                                [InlineKeyboardButton("Search Again", switch_inline_query_current_chat="")],
+                            ])
+                        )
                     )
-                )
         else:
             answers.append(
                 InlineQueryResultArticle(
