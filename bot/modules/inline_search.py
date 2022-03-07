@@ -37,7 +37,7 @@ async def inline_search(_, event: InlineQuery):
         if file_title:
             for title in file_title:
                 # Limit number of search result to less than 50
-                if file_title.index(title) < 30:
+                if file_title.index(title) < 49:
                     answers.append(
                         InlineQueryResultArticle(
                             title=title,
