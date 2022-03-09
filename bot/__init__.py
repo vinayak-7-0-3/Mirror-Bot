@@ -490,6 +490,12 @@ try:
 except KeyError:
     INDEX_PASS = None
     INDEX_USER = None
+try:
+    FSUB_CHANNEL = getConfig('FSUB_CHANNEL')
+    if not FSUB_CHANNEL.startswith('@'):
+        FSUB_CHANNEL = '@' + FSUB_CHANNEL
+except:
+    FSUB_CHANNEL = None
 
 DRIVES_NAMES.append("Main")
 DRIVES_IDS.append(parent_id)

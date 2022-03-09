@@ -17,7 +17,7 @@ from requests.exceptions import RequestException
 from bot import Interval, INDEX_URL, BUTTON_FOUR_NAME, BUTTON_FOUR_URL, BUTTON_FIVE_NAME, BUTTON_FIVE_URL, \
                 BUTTON_SIX_NAME, BUTTON_SIX_URL, BLOCK_MEGA_FOLDER, BLOCK_MEGA_LINKS, VIEW_LINK, aria2, QB_SEED, \
                 dispatcher, DOWNLOAD_DIR, download_dict, download_dict_lock, ZIP_UNZIP_LIMIT, TG_SPLIT_SIZE, LOGGER, \
-                INDEX_PASS, INDEX_USER, AUTHORIZED_CHATS, SUDO_USERS
+                INDEX_PASS, INDEX_USER, AUTHORIZED_CHATS, SUDO_USERS, FSUB_CHANNEL
 from bot.helper.ext_utils import fs_utils, bot_utils
 from bot.helper.ext_utils.shortenurl import short_url
 from bot.helper.ext_utils.exceptions import DirectDownloadLinkException, NotSupportedExtractionArchive
@@ -481,10 +481,20 @@ def giveindex_pass(update, context):
     query = update.callback_query
     user_id = query.from_user.id
     chat_id = query.message.chat.id
-    if user_id in SUDO_USERS or chat_id in AUTHORIZED_CHATS:
+    # If using for personal needs
+    """if user_id in SUDO_USERS or chat_id in AUTHORIZED_CHATS:
         query.answer(text=f"Username : {INDEX_USER}\nPassword : {INDEX_PASS}", show_alert=True)
     else:
-        query.answer(text="Go away you moron", show_alert=True)
+        query.answer(text="Go away you moron", show_alert=True)"""
+    if FSUB_CHANNEL:
+        try:
+            context.bot.get_chat_member(
+                chat_id=FSUB_CHANNEL, 
+                user_id=int(user_id)
+                )
+            query.answer(text=f"Username : {INDEX_USER}\nPassword : {INDEX_PASS}", show_alert=True)
+        except:
+            query.answer(text=f"Join Channel To Show The Password\n{FSUB_CHANNEL}", show_alert=True)
 
 
 
