@@ -484,6 +484,12 @@ try:
         logging.error(str(e))
 except KeyError:
     pass
+try:
+    INDEX_PASS = getConfig('INDEX_PASS')
+    INDEX_USER = getConfig('INDEX_USER')
+except KeyError:
+    INDEX_PASS = None
+    INDEX_USER = None
 
 DRIVES_NAMES.append("Main")
 DRIVES_IDS.append(parent_id)

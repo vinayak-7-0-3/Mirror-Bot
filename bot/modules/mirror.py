@@ -10,13 +10,14 @@ import string
 import time
 import shutil
 
-from telegram.ext import CommandHandler
+from telegram.ext import CommandHandler, CallbackQueryHandler
 from telegram import InlineKeyboardMarkup
 from requests.exceptions import RequestException
 
 from bot import Interval, INDEX_URL, BUTTON_FOUR_NAME, BUTTON_FOUR_URL, BUTTON_FIVE_NAME, BUTTON_FIVE_URL, \
                 BUTTON_SIX_NAME, BUTTON_SIX_URL, BLOCK_MEGA_FOLDER, BLOCK_MEGA_LINKS, VIEW_LINK, aria2, QB_SEED, \
-                dispatcher, DOWNLOAD_DIR, download_dict, download_dict_lock, ZIP_UNZIP_LIMIT, TG_SPLIT_SIZE, LOGGER
+                dispatcher, DOWNLOAD_DIR, download_dict, download_dict_lock, ZIP_UNZIP_LIMIT, TG_SPLIT_SIZE, LOGGER, \
+                INDEX_PASS, INDEX_USER, AUTHORIZED_CHATS, SUDO_USERS
 from bot.helper.ext_utils import fs_utils, bot_utils
 from bot.helper.ext_utils.shortenurl import short_url
 from bot.helper.ext_utils.exceptions import DirectDownloadLinkException, NotSupportedExtractionArchive
@@ -285,6 +286,8 @@ class MirrorListener(listeners.MirrorListeners):
                 buttons.buildbutton(f"{BUTTON_FIVE_NAME}", f"{BUTTON_FIVE_URL}")
             if BUTTON_SIX_NAME is not None and BUTTON_SIX_URL is not None:
                 buttons.buildbutton(f"{BUTTON_SIX_NAME}", f"{BUTTON_SIX_URL}")
+            if INDEX_PASS:
+                buttons.sbutton("Index Password", "indexpass")
             if self.message.from_user.username:
                 uname = f"@{self.message.from_user.username}"
             else:
@@ -474,6 +477,15 @@ def _mirror(bot, update, isZip=False, extract=False, isQbit=False, isLeech=False
         ariaDlManager.add_download(link, f'{DOWNLOAD_DIR}{listener.uid}/', listener, name)
         sendStatusMessage(update, bot)
 
+def giveindex_pass(update, context):
+    query = update.callback_query
+    user_id = query.from_user.id
+    chat_id = query.message.chat.id
+    if user_id in SUDO_USERS or chat_id in AUTHORIZED_CHATS:
+        query.answer(text="Yea boy.. Working XD", show_alert=True)
+
+
+
 
 def mirror(update, context):
     _mirror(context.bot, update)
@@ -535,6 +547,7 @@ qb_unzip_leech_handler = CommandHandler(BotCommands.QbUnzipLeechCommand, qb_unzi
                                 filters=CustomFilters.authorized_chat | CustomFilters.authorized_user, run_async=True)
 qb_zip_leech_handler = CommandHandler(BotCommands.QbZipLeechCommand, qb_zip_leech,
                                 filters=CustomFilters.authorized_chat | CustomFilters.authorized_user, run_async=True)
+index_pass_show_handler = CallbackQueryHandler(giveindex_pass, pattern="indexpass", run_async=True)
 
 dispatcher.add_handler(mirror_handler)
 dispatcher.add_handler(unzip_mirror_handler)
