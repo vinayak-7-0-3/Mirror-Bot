@@ -1,4 +1,3 @@
-from matplotlib.pyplot import text
 import requests
 import urllib
 import pathlib
