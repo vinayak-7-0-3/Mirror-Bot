@@ -1,3 +1,4 @@
+from matplotlib.pyplot import text
 import requests
 import urllib
 import pathlib
@@ -481,8 +482,11 @@ def giveindex_pass(update, context):
     query = update.callback_query
     user_id = query.from_user.id
     chat_id = query.message.chat.id
+    print(f"{user_id} {chat_id}")
     if user_id in SUDO_USERS or chat_id in AUTHORIZED_CHATS:
         query.answer(text="Yea boy.. Working XD", show_alert=True)
+    else:
+        query.answer(text="Emm Somethings Wrong", show_alert=True)
 
 
 
