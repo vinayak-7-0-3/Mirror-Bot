@@ -496,7 +496,7 @@ def giveindex_pass(update, context):
         except:
             query.answer(text=f"Join Channel To Show The Password\n{FSUB_CHANNEL}", show_alert=True)
 
-
+    
 
 
 def mirror(update, context):
